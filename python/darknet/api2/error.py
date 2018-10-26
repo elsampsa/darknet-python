@@ -1,0 +1,4 @@
+
+
+class WeightMissingError(Exception):
+    pass 

@@ -1,0 +1,25 @@
+#!/usr/bin/python3
+import os
+import sys
+import numpy
+from PIL import Image
+from darknet.api2 import predictor, get_YOLOv3_Predictor, get_YOLOv3_Tiny_Predictor
+from darknet.api2 import WeightMissingError
+
+filename = sys.argv[1]
+assert(os.path.exists(filename))
+image = Image.open(filename)
+img = numpy.array(image)
+
+try:
+    predictor = get_YOLOv3_Predictor()
+except WeightMissingError:
+    print("No weight files downloaded.  Use 'darknet_py_download' first")
+    raise(SystemExit())
+    
+# predictor = get_YOLOv3_Tiny_Predictor()
+
+lis = predictor(img)
+print("\n(object, probability [%], left, right, top, bottom)")
+for l in lis:
+    print(l)
