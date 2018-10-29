@@ -28,6 +28,7 @@
 #include "darknet_bridge.h"
 
 // #define SKIP_DARKNET 1
+// #define DEBUG 1
 
 image **load_alphabet_custom(const char* path)
 {
@@ -85,7 +86,7 @@ PyObject *get_detections(image im, detection *dets, int num, float thresh, char 
     PyObject *pylist = PyList_New(0);
     int i, j;
 
-    std::cout << "get_detections: num, classes : " << num << " " << classes << std::endl;
+    // std::cout << "get_detections: num, classes : " << num << " " << classes << std::endl;
     
     for(i = 0; i < num; ++i){ // loop over boxes (i.e. detections)
         // char labelstr[4096] = {0};
@@ -115,7 +116,7 @@ PyObject *get_detections(image im, detection *dets, int num, float thresh, char 
                 if(top < 0) top = 0;
                 if(bot > im.h-1) bot = im.h-1;
                 
-                printf("%s: (%i, %i, %i, %i) %.0f%%\n", names[j], left, right, top, bot, dets[i].prob[j]*100);
+                // printf("%s: (%i, %i, %i, %i) %.0f%%\n", names[j], left, right, top, bot, dets[i].prob[j]*100);
                 
                 PyObject *pytuple = PyTuple_Pack(6, // class name, probability in %, left, right, top, bottom
                     PyUnicode_FromString(names[j]),
@@ -273,42 +274,40 @@ DarknetPredictor::DarknetPredictor(DarknetContext ctx, float thresh, float hier_
     list *options = read_data_cfg_custom(ctx.datacfg);
     char *name_list = option_find_str(options, "names", "data/names.list");
     
-    std::cout << "DarknetPredictor: get_labels" << std::endl;
+#ifdef DEBUG
+    std::cout << "DarknetPredictor: 1" << std::endl;
+#endif
     
     names = get_labels(name_list);
     
-    std::cout << "DarknetPredictor: get_labels2" << std::endl;
+#ifdef DEBUG
+    std::cout << "DarknetPredictor: 2" << std::endl;
+#endif
     
-    // alphabet = load_alphabet();
+#ifdef DEBUG
     std::cout << "DarknetPredictor: datadir : " << ctx.datadir << " : " << ctx.datadir.c_str() << std::endl;
+#endif
     alphabet = load_alphabet_custom(ctx.datadir.c_str());
     
-    std::cout << "DarknetPredictor: get_labels3" << std::endl;
-    
+#ifdef DEBUG    
     std::cout << "DarknetPredictor : " << cfgfile << " " << weightfile << std::endl;
+#endif
     
 #ifdef SKIP_DARKNET
 #else
     net = load_network(cfgfile, weightfile, 0);
-    
-    std::cout << "net w, h=" << net->w << " " << net->h << std::endl;
-    
     set_batch_network(net, 1);
+    #ifdef DEBUG
+    std::cout << "DarknetPredictor : net w, h=" << net->w << " " << net->h << std::endl;
+    #endif
 #endif
-    
     srand(2222222);
     
-    std::cout << "1\n";
     free(datacfg);
-    std::cout << "2\n";
     free(cfgfile);
-    std::cout << "3\n";
     free(weightfile);
-    std::cout << "4\n";
     free_list(options);
-    std::cout << "5\n";
     // free(name_list);
-    std::cout << "6\n";
     
     im.data = NULL;
     im.w = 0;
@@ -324,7 +323,7 @@ DarknetPredictor::~DarknetPredictor() {
     free_network(net);
 #endif
     // TODO:
-    //free(alphabet); // or should run through the alphabets ..
+    //free(alphabet); // or should run through the alphabets ..?
     //free_ptrs((void**)alphabet, 128);
 }
 
@@ -380,7 +379,7 @@ PyObject* DarknetPredictor::predict(PyObject* pyarr, bool draw) {
     
     pyArrayToImage((PyArrayObject*)pyarr); // manipulates the member "im"
     if (im.c == 0) {
-        return NULL; // TODO: return empty list
+        return PyList_New(0);
     }
     
     // image im = load_image_color(input,0,0); // RGB24 image
@@ -403,7 +402,9 @@ PyObject* DarknetPredictor::predict(PyObject* pyarr, bool draw) {
     return feature_list;
 #endif
     
+#ifdef DEBUG
     std::cout << "predict: net->w, net->h : " << net->w << " " << net->h << std::endl;
+#endif
     
     image sized = letterbox_image(im, net->w, net->h); // TODO: avoid constant reallocations
     layer l = net->layers[net->n-1];

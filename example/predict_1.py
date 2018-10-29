@@ -1,4 +1,5 @@
 import numpy
+import time
 from PIL import Image
 from darknet.api2.predictor import get_YOLOv3_Predictor, get_YOLOv3_Tiny_Predictor
 
@@ -10,7 +11,8 @@ img = numpy.array(image)
 predictor = get_YOLOv3_Predictor()
 # predictor = get_YOLOv3_Tiny_Predictor()
 
-# this takes around 0.2 secs on a decent (5.1 grade) GPU
+t = time.time()
 lis = predictor(img)
+print("Predicting took", time.time()-t, "seconds") # takes around 0.2 secs on a decent (5.1 grade) GPU
 for l in lis:
     print(l)

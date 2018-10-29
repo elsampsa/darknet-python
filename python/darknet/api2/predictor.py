@@ -30,7 +30,7 @@ pre_mod = "darknet.api2.predictor : "
 class Predictor:
     
     
-    def __init__(self, training_ctx = None, config_file = None, weight_file = None, thresh = 0.9, hier_thresh = 0.5):
+    def __init__(self, training_ctx = None, config_file = None, weight_file = None, thresh = 0.9, hier_thresh = 0.5, verbose = False):
         # datacfg(datacfg), cfgfile(cfgfile), weightfile(weightfile), datadir(datadir), thresh(thresh), hier_thresh(hier_thresh)
         """
         DarknetContext ctx = DarknetContext(
@@ -51,13 +51,16 @@ class Predictor:
         assert(os.path.exists(config_file))
         assert(os.path.exists(weight_file))
         
-        print(self.pre)
-        print(str(training_ctx))
-        print(self.pre)
-        print(self.pre, config_file)
-        print(self.pre, weight_file)
-        print(self.pre, getDataFile("labels/"))
+        self.verbose = verbose
         
+        if (self.verbose):
+            print(self.pre)
+            print(self.pre, str(training_ctx))
+            print(self.pre)
+            print(self.pre, config_file)
+            print(self.pre, weight_file)
+            print(self.pre, getDataFile("labels/"))
+            
         self.thresh = thresh
         self.hier_thresh = hier_thresh
         
