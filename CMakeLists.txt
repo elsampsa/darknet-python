@@ -122,7 +122,7 @@ message("DARKNET ROOT : ${DARKNET_ROOT}")
 
 ## ********************************************************************************
 ## The statically compiled library we're encapsulating here into our library, might have some dependencies on some elemental libraries
-pkg_search_module(OPENCV REQUIRED opencv)
+# pkg_search_module(OPENCV REQUIRED opencv)
 
 # LDFLAGS+= `pkg-config --libs opencv` -lstdc++
 # COMMON+= `pkg-config --cflags opencv` 
@@ -133,7 +133,7 @@ pkg_search_module(OPENCV REQUIRED opencv)
 # LDFLAGS+= -L/usr/local/cuda/lib64 -lcuda -lcudart -lcublas -lcurand
 
 ## header file location
-target_include_directories(${PROJECT_NAME} PUBLIC ${OPENCV_INCLUDE_DIRS})
+# target_include_directories(${PROJECT_NAME} PUBLIC ${OPENCV_INCLUDE_DIRS})
 ## link time dependencies
 # target_link_libraries(${PROJECT_NAME} ${OPENCV_LIBRARIES})
 ## *******************************************************************************
