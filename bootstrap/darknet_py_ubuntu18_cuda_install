@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+# Fetch and run me like this:
+#
+# wget https://raw.githubusercontent.com/elsampsa/darknet-python/master/bootstrap/darknet_py_ubuntu18_cuda_install
+# chmod a+x darknet_py_ubuntu18_cuda_install
+# ./darknet_py_ubuntu18_cuda_install
+#
 echo 
 echo Downloading nvidia drivers and cuda.  This might take a while ..
 echo
