@@ -108,8 +108,12 @@ PyObject *get_detections(image im, detection *dets, int num, float thresh, char 
 
                 int left  = (b.x-b.w/2.)*im.w;
                 int right = (b.x+b.w/2.)*im.w;
-                int top   = (b.y-b.h/2.)*im.h;
-                int bot   = (b.y+b.h/2.)*im.h;
+                
+                // darknet coordinate system starts from upper left corner (data coordinates)
+                // we want from the lower left corner (visual coordinates)
+                // so, we use 1.-
+                int top   = (1.-(b.y+b.h/2.))*im.h;
+                int bot   = (1.-(b.y-b.h/2.))*im.h;
 
                 if(left < 0) left = 0;
                 if(right > im.w-1) right = im.w-1;
