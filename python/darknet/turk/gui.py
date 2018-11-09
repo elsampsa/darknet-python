@@ -66,7 +66,7 @@ def pathjoin(*args):
     return st[:-1]
 
 
-def QCapsulate(self, widget, name, blocking = False, nude = False):
+def QCapsulate(widget, name, blocking = False, nude = False):
     """Helper function that encapsulates QWidget into a QMainWindow
     """
 
@@ -78,7 +78,7 @@ def QCapsulate(self, widget, name, blocking = False, nude = False):
         def __init__(self, blocking = False, parent = None, nude = False):
             super().__init__(parent)
             self.propagate = True # send signals or not
-            self.setStyleSheet(style.main_gui)
+            # self.setStyleSheet(style.main_gui)
             if (blocking):
                 self.setWindowModality(QtCore.Qt.ApplicationModal)
             if (nude):
@@ -733,10 +733,10 @@ class MyGui(QtWidgets.QMainWindow):
         self.lay.addWidget(self.file_list.widget)
         # self.tag_widget      = TagWidget(self.w)
         
+        self.tag_widget      = TagWidget(None)
         self.tag_win = QCapsulate(self.tag_widget, "Tagging", blocking = False, nude = False)
         self.tag_win.show()
         
-        self.tag_widget      = TagWidget(None)
         self.tag_list        = TagListContainer(self.w, class_list)
         self.class_list      = ClassListContainer(self.w, class_list)
         
