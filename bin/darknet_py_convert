@@ -1,0 +1,12 @@
+#!/usr/bin/python3
+"""This script requires imagemagick installed
+"""
+import glob
+import os
+
+for fname in glob.glob("*"):
+    # print(fname)
+    pre=fname.split(".")[0]
+    st="convert "+fname+" "+pre+".jpg"
+    print(st)
+    os.system(st)
