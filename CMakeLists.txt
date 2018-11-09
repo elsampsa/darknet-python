@@ -287,6 +287,7 @@ install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/darknet/api2/test_data"  DESTINATI
 
 install(PROGRAMS "${CMAKE_SOURCE_DIR}/bin/darknet_py"  DESTINATION "/usr/bin")
 install(PROGRAMS "${CMAKE_SOURCE_DIR}/bin/darknet_py_download"  DESTINATION "/usr/bin")
+install(PROGRAMS "${CMAKE_SOURCE_DIR}/bin/darknet_py_gui"  DESTINATION "/usr/bin")
 
 # install(DIRECTORY "${FFMPEG_ROOT}" DESTINATION include/valkka   FILES_MATCHING PATTERN "*.h")
 

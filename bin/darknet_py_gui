@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+from darknet.turk import gui
+
+gui.main()
+

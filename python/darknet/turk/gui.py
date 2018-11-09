@@ -747,8 +747,11 @@ def process_cl_args():
   def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
 
-  parser = argparse.ArgumentParser(usage="""
-""")
+  parser = argparse.ArgumentParser(usage = 
+    "\n" +
+    sys.argv[0]+" --create_dir=true  --directory=$HOME/tmp   : creates a scaffold directory.  Read the README.md therein. \n" +
+    sys.argv[0]+" --directory=$HOME/tmp                      : Starts the tagging studio program.                         \n"
+    )
   parser.register('type','bool',str2bool)
   
   parser.add_argument("--create_dir",     action="store", type=bool, default=False,      help="init scaffold directory")
