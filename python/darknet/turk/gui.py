@@ -66,6 +66,50 @@ def pathjoin(*args):
     return st[:-1]
 
 
+def QCapsulate(self, widget, name, blocking = False, nude = False):
+    """Helper function that encapsulates QWidget into a QMainWindow
+    """
+
+    class QuickWindow(QtWidgets.QMainWindow):
+
+        class Signals(QtCore.QObject):
+            close = QtCore.Signal()
+
+        def __init__(self, blocking = False, parent = None, nude = False):
+            super().__init__(parent)
+            self.propagate = True # send signals or not
+            self.setStyleSheet(style.main_gui)
+            if (blocking):
+                self.setWindowModality(QtCore.Qt.ApplicationModal)
+            if (nude):
+                # http://doc.qt.io/qt-5/qt.html#WindowType-enum
+                # TODO: create a widget for a proper splashscreen (omitting X11 and centering manually)
+                # self.setWindowFlags(QtCore.Qt.Popup) # Qt 5.9+ : setFlags()
+                # self.setWindowFlags(QtCore.Qt.SplashScreen | QtCore.Qt.WindowStaysOnTopHint)
+                self.setWindowFlags(QtCore.Qt.Dialog)
+            self.signals = self.Signals()
+            
+
+        def closeEvent(self, e):
+            if (self.propagate):
+                self.signals.close.emit()
+            e.accept()
+            
+        def setPropagate(self):
+            self.propagate = True
+            
+        def unSetPropagate(self):
+            self.propagate = False
+            
+
+    win = QuickWindow(blocking = blocking, nude = nude)
+    win.setCentralWidget(widget)
+    win.setLayout(QtWidgets.QHBoxLayout())
+    win.setWindowTitle(name)
+    return win
+
+
+
 class Label:
     
     def __init__(self, index=0, center_x=0, center_y=0, width=0, height=0):
@@ -687,12 +731,17 @@ class MyGui(QtWidgets.QMainWindow):
         self.file_list.checkTags("train_labels")
 
         self.lay.addWidget(self.file_list.widget)
-        self.tag_widget      = TagWidget(self.w)
+        # self.tag_widget      = TagWidget(self.w)
+        
+        self.tag_win = QCapsulate(self.tag_widget, "Tagging", blocking = False, nude = False)
+        self.tag_win.show()
+        
+        self.tag_widget      = TagWidget(None)
         self.tag_list        = TagListContainer(self.w, class_list)
         self.class_list      = ClassListContainer(self.w, class_list)
         
         self.lay.addWidget(self.file_list.widget)
-        self.lay.addWidget(self.tag_widget)
+        # self.lay.addWidget(self.tag_widget)
         self.lay.addWidget(self.tag_list.widget)
         self.lay.addWidget(self.class_list.widget)
         
