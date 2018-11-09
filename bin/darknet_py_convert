@@ -3,10 +3,38 @@
 """
 import glob
 import os
+import sys
 
-for fname in glob.glob("*"):
-    # print(fname)
-    pre=fname.split(".")[0]
-    st="convert "+fname+" "+pre+".jpg"
-    print(st)
-    os.system(st)
+
+def all_to_jpg():
+    for fname in glob.glob("*"):
+        # print(fname)
+        pre=fname.split(".")[0]
+        st="convert "+fname+" "+pre+".jpg"
+        print(st)
+        os.system(st)
+        
+def jpg_to_bw():
+    for fname in glob.glob("*.jpg"):
+        # print(fname)
+        pre=fname.split(".")[0]
+        st="convert "+fname+" -type Grayscale "+fname
+        print(st)
+        os.system(st)
+        
+        
+print("""
+darknet_py_convert all_to_jpg   
+    converts all files to jpg
+
+darknet_py_convert jpg_to_bw
+    converts all jpg files to black-n-white
+""")
+
+if (sys.argv[1]=="all_to_jpg"):
+    all_to_jpg()
+elif (sys.argv[1]=="jpg_to_bw"):
+    jpg_to_bw()
+else:
+    print("unknown command")
+
