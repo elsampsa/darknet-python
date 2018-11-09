@@ -150,7 +150,7 @@ class Controller:
         pixmap           = QtCore.Signal(object) # current pixmap file
         labels           = QtCore.Signal(object) # list of current Label objects
         current_label    = QtCore.Signal(object) # the current Label object
-        reread_dir       = QtCore.Signal()
+        delete_file      = QtCore.Signal()
     
     
     def __init__(self, di, sub, file_list, tag_widget, tag_list, class_list):
@@ -167,7 +167,6 @@ class Controller:
         
         # state variables
         self.rect = None
-        self.current_filename = None
         
         # signals from controller to widgets
         self.signals.pixmap.  connect(tag_widget.   set_pixmap_slot)
@@ -175,7 +174,7 @@ class Controller:
         self.signals.labels.  connect(tag_list.     set_labels_slot)
         self.signals.current_label.   connect(tag_widget.   set_current_label_slot)
         
-        self.signals.reread_dir. connect(file_list.reread_dir_slot)
+        self.signals.delete_file.connect(file_list.delete_current_file_slot)
         
         # signals from widgets to controller
         file_list.  signals.current_file.        connect(self.set_file_slot)            # new file chosen .. propagate information to all widgets
@@ -227,10 +226,7 @@ class Controller:
     def delete_file_slot(self):
         """Delete current file
         """
-        if (self.current_filename != None):
-            print("Controller: delete_file_slot: ",self.current_filename)
-            os.remove(self.current_filename)
-        self.signals.reread_dir.emit()
+        self.signals.delete_file.emit()
         
         
     def set_rectangle_slot(self, rect):
@@ -302,6 +298,7 @@ class FileListContainer:
         self.di = "."
         self.sub = ""
         self.blocked = False # block signal emitting or not
+        self.current_filename = None
         
     def readDir(self, di, sub):
         """
@@ -346,14 +343,28 @@ class FileListContainer:
             
     # *** internal slots ***
     def item_changed_slot(self, new, old):
+        self.current_filename = pathjoin(self.di, self.sub, new.text())
         if (self.blocked):
             return
-        self.signals.current_file.emit(pathjoin(self.di, self.sub, new.text()))
+        self.signals.current_file.emit(self.current_filename)
         
     def reread_dir_slot(self):
         if (self.blocked):
             return
         self.readDir(self.di, self.sub)
+        
+    def delete_current_file_slot(self):
+        if not self.current_filename:
+            return
+        cr = self.widget.currentRow()
+        os.remove(self.current_filename)
+        self.readDir(self.di, self.sub)
+        try:
+            self.widget.setCurrentRow(cr)
+        except:
+            self.widget.setCurrentRow(0)
+        
+        
         
 
 
@@ -649,8 +660,6 @@ class TagListContainer:
         self.signals.delete_tag.emit(index)
         
         
-        
-    
 class ClassListContainer:
     
     class Signals(QtCore.QObject):
