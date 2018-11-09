@@ -150,6 +150,7 @@ class Controller:
         pixmap           = QtCore.Signal(object) # current pixmap file
         labels           = QtCore.Signal(object) # list of current Label objects
         current_label    = QtCore.Signal(object) # the current Label object
+        reread_dir       = QtCore.Signal()
     
     
     def __init__(self, di, sub, file_list, tag_widget, tag_list, class_list):
@@ -166,6 +167,7 @@ class Controller:
         
         # state variables
         self.rect = None
+        self.current_filename = None
         
         # signals from controller to widgets
         self.signals.pixmap.  connect(tag_widget.   set_pixmap_slot)
@@ -173,13 +175,14 @@ class Controller:
         self.signals.labels.  connect(tag_list.     set_labels_slot)
         self.signals.current_label.   connect(tag_widget.   set_current_label_slot)
         
+        self.signals.reread_dir. connect(file_list.reread_dir_slot)
+        
         # signals from widgets to controller
         file_list.  signals.current_file.        connect(self.set_file_slot)            # new file chosen .. propagate information to all widgets
         tag_widget. signals.current_rectangle.   connect(self.set_rectangle_slot)       # a new rectangle has been created
         
         tag_list.   signals.current_tag.         connect(self.set_current_tag_slot)     # index of the current tag .. highlight corresponding rectangle
         tag_list.   signals.delete_tag.          connect(self.delete_current_tag_slot)  # removes the current chosen tag .. update everything
-        
         
         class_list. signals.current_class.       connect(self.set_current_class_slot)   # sets current class .. that might be turned into a tag
         class_list. signals.save_class.          connect(self.save_current_class_slot)  # uses current rectangle to create a tag
@@ -205,6 +208,8 @@ class Controller:
         
     def set_file_slot(self, fname):
         # get the labels
+        self.current_filename = fname
+        
         prename = fname.split("/")[-1].split(".")[0]
         txtname = pathjoin(self.di, self.sub, prename) + ".txt"
         
@@ -217,6 +222,16 @@ class Controller:
         
         self.signals.pixmap.emit(fname)
         self.signals.labels.emit(self.data)
+        
+        
+    def delete_file_slot(self):
+        """Delete current file
+        """
+        if (self.current_filename != None):
+            print("Controller: delete_file_slot: ",self.current_filename)
+            os.remove(self.current_filename)
+        self.signals.reread_dir.emit()
+        
         
     def set_rectangle_slot(self, rect):
         """:param rect: a tuple with the rectangle in relative coordinates
@@ -286,12 +301,14 @@ class FileListContainer:
         self.signals = FileListContainer.Signals()
         self.di = "."
         self.sub = ""
+        self.blocked = False # block signal emitting or not
         
     def readDir(self, di, sub):
         """
         :param di:  root directory
         :param sub: image directory (relative to root directory), typically "train_images"
         """
+        self.blocked=True
         self.di = di
         self.sub = sub
         self.filenames=[]
@@ -302,6 +319,7 @@ class FileListContainer:
             filename=fullname.split("/")[-1] 
             self.widget.addItem(QtWidgets.QListWidgetItem(filename, self.widget))
             self.filenames.append(fullname)
+        self.blocked=False
         
     def write(self, fname):
         f=open(fname, "w")
@@ -328,7 +346,14 @@ class FileListContainer:
             
     # *** internal slots ***
     def item_changed_slot(self, new, old):
+        if (self.blocked):
+            return
         self.signals.current_file.emit(pathjoin(self.di, self.sub, new.text()))
+        
+    def reread_dir_slot(self):
+        if (self.blocked):
+            return
+        self.readDir(self.di, self.sub)
         
 
 
@@ -754,13 +779,15 @@ class MyGui(QtWidgets.QMainWindow):
         self.lay.addWidget(self.buttons)
         self.buttons_lay = QtWidgets.QVBoxLayout(self.buttons)
         self.train_button = QtWidgets.QPushButton("Train", self.buttons)
+        self.delete_file_button = QtWidgets.QPushButton("Delete image", self.buttons)
         self.buttons_lay.addWidget(self.train_button)
         self.train_button.clicked.connect(self.train_slot)
+        self.delete_file_button.clicked.connect(self.controller.delete_file_slot)
 
 
     def train_slot(self):
         self.train(cont = False)
-
+        
 
     def train(self, cont = False):
         config_file = pathjoin(self.di, conf_file)
