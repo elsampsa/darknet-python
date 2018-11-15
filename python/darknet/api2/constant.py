@@ -21,6 +21,14 @@ from darknet.api2.trainer import TrainingContext
 from darknet.api2.error import WeightMissingError
 
 
+def get_yolov2_weights_file():
+    filename = getUserFile("yolov2.weights")
+    if (os.path.exists(filename)):
+        return filename
+    else:
+        raise(WeightMissingError("needs yolov2.weights"))
+
+
 def get_yolov3_weights_file():
     filename = getUserFile("yolov3.weights")
     if (os.path.exists(filename)):

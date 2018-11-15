@@ -268,7 +268,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
 
 
 
-DarknetPredictor::DarknetPredictor(DarknetContext ctx, float thresh, float hier_thresh) : ctx(ctx), thresh(thresh), hier_thresh(hier_thresh), height(0), width(0), channels(0) {
+DarknetPredictor::DarknetPredictor(DarknetContext ctx, float thresh, float hier_thresh) : ctx(ctx), thresh(thresh), hier_thresh(hier_thresh), height(0), width(0), channels(0), my_gpu_index(-1) {
     // stupid const char => char conversions
     char* datacfg = strdup(ctx.datacfg.c_str());
     char* cfgfile = strdup(ctx.cfgfile.c_str()); 
@@ -412,7 +412,22 @@ PyObject* DarknetPredictor::predict(PyObject* pyarr, bool draw) {
     
     image sized = letterbox_image(im, net->w, net->h); // TODO: avoid constant reallocations
     layer l = net->layers[net->n-1];
-
+    
+    // gpu_index : defined as extern int in darknet.h
+    // .. used in detector.c
+    // cuda.c states "int gpu_index = 0"
+    // so it's a singleton living in cuda.c
+    // network structure has als a gpu_index member (see darknet.h)
+    // network->gpu_index
+    
+    #ifdef GPU
+    // which one I should use ..?
+    if (my_gpu_index>-1) {
+        cuda_set_device(my_gpu_index);
+        network->gpu_index = my_gpu_index;
+    }
+    #endif
+    
     float *X = sized.data;
     // time=what_time_is_it_now();
     network_predict(net, X);
@@ -439,6 +454,10 @@ PyObject* DarknetPredictor::predict(PyObject* pyarr, bool draw) {
     free_image(sized); 
     
     return feature_list;
+}
+
+void DarknetPredictor::setGpuIndex(int i) {
+    my_gpu_index=i;
 }
 
 
@@ -485,6 +504,8 @@ DarknetTrainer::DarknetTrainer(DarknetContext ctx, PyObject* py_gpu_list) : ctx(
     
     gpus = &gpu_index;
     ngpus = 1;
+    
+    // so
     
     // TODO: get the gpu indexes from the python list
     

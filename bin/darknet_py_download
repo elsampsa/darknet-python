@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import sys
-from darknet.api2.tools import downloadYOLOv3, downloadYOLOv3Tiny
+from darknet.api2.tools import downloadYOLOv2, downloadYOLOv3, downloadYOLOv3Tiny
 
 print("Will download weight files")
 print("They will appear under ~/.darknet")
@@ -9,4 +9,6 @@ print()
 downloadYOLOv3() 
 print()
 downloadYOLOv3Tiny()
+print()
+downloadYOLOv2()
 print()

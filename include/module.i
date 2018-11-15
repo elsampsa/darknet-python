@@ -61,7 +61,9 @@ class DarknetPredictor {                                                        
 public:                                                                                      // <pyapi>
     DarknetPredictor(DarknetContext ctx, float thresh = .5, float hier_thresh = .5);         // <pyapi>
     virtual ~DarknetPredictor();                                                             // <pyapi>
+public:                                                                   // <pyapi>
     PyObject* predict(PyObject* pyarr, bool draw = false);                // <pyapi>
+    setGpuIndex(int i);                                                   // <pyapi>
 };                                                                        // <pyapi>
  
 class DarknetTrainer {                                                    // <pyapi>

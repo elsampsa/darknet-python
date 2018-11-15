@@ -20,7 +20,7 @@ import os
 import numpy
 from darknet import core
 from darknet.api2.tools import getDataFile, getTestDataFile, getUserFile
-from darknet.api2.constant import get_yolov3_weights_file, get_yolov3_tiny_weights_file
+from darknet.api2.constant import get_yolov2_weights_file, get_yolov3_weights_file, get_yolov3_tiny_weights_file
 from darknet.api2.trainer import TrainingContext
 
 pre_mod = "darknet.api2.predictor : "
@@ -93,8 +93,24 @@ class Predictor:
         # just return list as is
         return lis
             
-            
 
+
+def get_YOLOv2_Predictor():
+    # has been trained with coco
+    file_yolov2_cfg = getDataFile("yolov2/yolov2.cfg")
+    
+    yolov2_training_ctx = TrainingContext(
+        n_classes = 80,
+        trainfile = "/home/pjreddie/data/coco/trainvalno5k.txt",
+        validfile = "coco_testdev",
+        namefile = getDataFile("yolov3/coco.names"), # all the other values don't make any difference when predicting
+        backup_dir ="/home/pjreddie/backup/",
+        setname = "coco"
+    )
+
+    return Predictor(training_ctx = yolov2_training_ctx, weight_file = get_yolov2_weights_file(), config_file = file_yolov2_cfg)
+
+            
 def get_YOLOv3_Predictor():
     # has been trained with coco
     file_yolov3_cfg = getDataFile("yolov3/yolov3.cfg")

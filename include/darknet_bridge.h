@@ -99,11 +99,14 @@ protected:
     
     image               im;
     
+    int                 my_gpu_index;
+    
 protected:
     void pyArrayToImage(PyArrayObject* pyarr); ///< takes a numpy array and copies the contents to DarknetPredictor::im
 
-public:
+public:                                                                   // <pyapi>
     PyObject* predict(PyObject* pyarr, bool draw = false);                // <pyapi>
+    void setGpuIndex(int i);                                              // <pyapi>
 };                                                                        // <pyapi>
 
 

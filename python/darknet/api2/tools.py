@@ -36,12 +36,21 @@ def getUserFile(fname):
     return os.path.join(user_dir, fname)
 
 
+def downloadYOLOv2():
+    makeUserDir()
+    st="wget https://pjreddie.com/media/files/yolov2.weights -o " + getUserFile("yolov2.weights")
+    print("running", st)
+    print("this will take a while ..")
+    os.system(st)
+
+
 def downloadYOLOv3():
     makeUserDir()
     st="wget https://pjreddie.com/media/files/yolov3.weights -o " + getUserFile("yolov3.weights")
     print("running", st)
     print("this will take a while ..")
     os.system(st)
+
     
 def downloadYOLOv3Tiny():
     makeUserDir()
