@@ -8,8 +8,8 @@ image = Image.open(filename)
 img = numpy.array(image)
 
 # this will take few seconds .. but we need to create predictor only once
-# predictor = get_YOLOv2_Predictor()
-predictor = get_YOLOv3_Predictor()
+predictor = get_YOLOv2_Predictor()
+# predictor = get_YOLOv3_Predictor()
 # predictor = get_YOLOv3_Tiny_Predictor()
 
 t = time.time()
