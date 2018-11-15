@@ -63,13 +63,15 @@ Python examples can be found in the *example* folder.
 
 ## Training
 
-These python bindings come with homebrewn tagger program, written in Python3 and Qt, called "DarkTurk (tm)" (as in mechanical turk)
+This python binding comes with a homebrewn tagger program, written in Python3 and Qt, called "DarkTurk (tm)" (as in mechanical turk).  Install Python Qt with this command:
+
+    pip3 install --user --upgrade PySide2
 
 Let's start by creating a scaffold directory structure:
 
     darknet_py_gui --create_dir=true --directory=$HOME/darkturk/train1
 
-Let's see README.md in that newly created directory.  It says:
+See README.md in that newly created directory.  It says:
     
     names.txt      : one object class per line
     net.cfg        : the neural network topology
@@ -86,7 +88,7 @@ So, now you're all set.  Start DarkTurk with:
 
 You might want to press the "Help!" button for instructions
 
-Once you have done tagging, close the program windows.  You can resume tagging later if you want to.
+Once you have done all that tagging, close the program windows.  You can resume tagging later if you want to with that same command.
 
 Finally, it's time to train:
 
