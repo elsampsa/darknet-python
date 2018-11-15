@@ -424,7 +424,7 @@ PyObject* DarknetPredictor::predict(PyObject* pyarr, bool draw) {
     // which one I should use ..?
     if (my_gpu_index>-1) {
         cuda_set_device(my_gpu_index);
-        network->gpu_index = my_gpu_index;
+        net->gpu_index = my_gpu_index;
     }
     #endif
     

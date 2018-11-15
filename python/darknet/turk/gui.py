@@ -787,12 +787,15 @@ class MyGui(QtWidgets.QMainWindow):
         self.buttons = QtWidgets.QWidget(self.w)
         self.lay.addWidget(self.buttons)
         self.buttons_lay = QtWidgets.QVBoxLayout(self.buttons)
-        self.train_button = QtWidgets.QPushButton("Train", self.buttons)
+        # self.train_button = QtWidgets.QPushButton("Train", self.buttons)
         self.delete_file_button = QtWidgets.QPushButton("Delete image", self.buttons)
-        self.buttons_lay.addWidget(self.train_button)
-        self.train_button.clicked.connect(self.train_slot)
+        self.help_button = QtWidgets.QPushButton("Help!", self.buttons)
+        self.buttons_lay.addWidget(self.delete_file_button)
+        self.buttons_lay.addWidget(self.help_button)
+        # self.buttons_lay.addWidget(self.train_button)
+        # self.train_button.clicked.connect(self.train_slot)
         self.delete_file_button.clicked.connect(self.controller.delete_file_slot)
-
+        self.help_button.clicked.connect(self.show_help)
 
     def train_slot(self):
         self.train(cont = False)
@@ -821,6 +824,23 @@ class MyGui(QtWidgets.QMainWindow):
         trainer()
     
 
+    def show_help(self):
+        st="""Welcome to DarkTurk(tm) !
+        
+Choose an image from the list
+        
+In the image, just keep pressing the left mouse button and drag a rectangle.  Once you are ready, choose a class from the rightmost list.
+
+The list in the center shows active tags for the image.
+
+To delete an active tag, double-click on it.
+
+"Delete image" button deletes an image permanently from the directory.
+
+That's it! :)
+"""        
+        QtWidgets.QMessageBox.about(self.w, "Help", st)
+        
     def closeEvent(self,e):
         print("closeEvent!")
         e.accept()
@@ -834,13 +854,15 @@ def process_cl_args():
 
   parser = argparse.ArgumentParser(usage = 
     "\n" +
-    sys.argv[0]+" --create_dir=true  --directory=$HOME/tmp   : creates a scaffold directory.  Read the README.md therein. \n" +
-    sys.argv[0]+" --directory=$HOME/tmp                      : Starts the tagging studio program.                         \n"
+    sys.argv[0]+" --create_dir=true      : creates a scaffold training directory.  Read the README.md therein. \n" +
+    sys.argv[0]+" --directory=$HOME/tmp  : The training directory                                              \n" +
+    sys.argv[0]+" --train                : Starts training                                                     \n"
     )
   parser.register('type','bool',str2bool)
   
   parser.add_argument("--create_dir",     action="store", type=bool, default=False,      help="init scaffold directory")
-  parser.add_argument("--train",          action="store", type=bool, default=False,      help="no gui, just train")
+  parser.add_argument("--train",          action="store", type=bool, default=False,      help="train from scratch")
+  # parser.add_argument("--train_continue", action="store", type=bool, default=False,      help="continue training") # just check if file exists
   parser.add_argument("--directory",      action="store", type=str,  required=True,      help="the target scaffold directory (must exist)")
   # parser.add_argument("--n",              action="store", type=int, required=True,        help="Number of cameras to be added, for example 10")
   parsed_args, unparsed_args = parser.parse_known_args()
@@ -859,8 +881,31 @@ def main():
         return
         
     if (parsed.train):
-        print("just train")
-        return
+        config_file = pathjoin(parsed.directory, conf_file)
+        wf = pathjoin(parsed.directory, weight_file)
+        if not os.path.exists(wf):
+            print("Training from scratch!")
+            wf=""
+        else:
+            print("Continuing training with", wf)
+
+        ctx = TrainingContext.fromTemplateDir(parsed.directory)
+
+        print("train :")
+        print("train : training_ctx :\n", ctx, "\n")
+        print("train : config_file  :", config_file)
+        print("train : weight_file  :", wf)
+        print("train :")
+        
+        # TODO: check that all these files exist
+        
+        trainer = Trainer(
+            training_ctx = ctx, 
+            config_file = config_file,
+            weight_file = wf
+        )
+        trainer()
+    
         
     app=QtWidgets.QApplication(["test_app"])
     mg=MyGui(directory = parsed.directory)

@@ -29,8 +29,7 @@ pre_mod = "darknet.api2.predictor : "
 
 class Predictor:
     
-    
-    def __init__(self, training_ctx = None, config_file = None, weight_file = None, thresh = 0.9, hier_thresh = 0.5, verbose = False):
+    def __init__(self, training_ctx = None, config_file = None, weight_file = None, thresh = 0.9, hier_thresh = 0.5, verbose = False, gpu_index = -1):
         # datacfg(datacfg), cfgfile(cfgfile), weightfile(weightfile), datadir(datadir), thresh(thresh), hier_thresh(hier_thresh)
         """
         DarknetContext ctx = DarknetContext(
@@ -73,7 +72,9 @@ class Predictor:
             getDataFile("labels/")
             )
         
-        self.predictor = core.DarknetPredictor(self.ctx, thresh, hier_thresh);
+        self.predictor = core.DarknetPredictor(self.ctx, thresh, hier_thresh)
+        if (gpu_index >=0):
+            self.predictor.setGpuIndex(gpu_index)
         
             
     def __call__(self, img):

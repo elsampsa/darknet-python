@@ -63,7 +63,7 @@ public:                                                                         
     virtual ~DarknetPredictor();                                                             // <pyapi>
 public:                                                                   // <pyapi>
     PyObject* predict(PyObject* pyarr, bool draw = false);                // <pyapi>
-    setGpuIndex(int i);                                                   // <pyapi>
+    void setGpuIndex(int i);                                              // <pyapi>
 };                                                                        // <pyapi>
  
 class DarknetTrainer {                                                    // <pyapi>

@@ -58,11 +58,63 @@ With the test script "darknet_py" like this:
 
 Images are passed to darknet core library using numpy arrays (through memory only, of course).  Results are returned as python lists.
 
-Examples can be found in the *example* folder.
+Python examples can be found in the *example* folder.
+
+
+## Training
+
+These python bindings come with homebrewn tagger program, written in Python3 and Qt, called "DarkTurk (tm)" (as in mechanical turk)
+
+Let's start by creating a scaffold directory structure:
+
+    darknet_py_gui --create_dir=true --directory=$HOME/darkturk/train1
+
+Let's see README.md in that newly created directory.  It says:
+    
+    names.txt      : one object class per line
+    net.cfg        : the neural network topology
+    train_images/  : place your training images here
+    valid_images/  : place your validation images here
+
+So, proceed as instructed.  "names.txt" has the object names (i.e. like in file "coco.names") and net.cfg describes the neural net (like in the file "yolov3.cfg").  Start py putting your jpg images into the "train_images/" folder.  If you need image conversion to jpg, try the "darknet_py_convert" command in the "train_images/" folder.
+
+DarkTurk(tm) will take automagically care of the rest of the necessary files.
+
+So, now you're all set.  Start DarkTurk with:
+
+    darknet_py_gui --directory=$HOME/darkturk/train1
+
+You might want to press the "Help!" button for instructions
+
+Once you have done tagging, close the program windows.  You can resume tagging later if you want to.
+
+Finally, it's time to train:
+
+    darknet_py_gui --train=true --directory=$HOME/darkturk/train1 
+
+(you can also do the training with the canonical darknet commands as instructed in the darknet web pages)
+
+The training can be stopped elegantly (its darknet!) from another terminal with the command:
+
+    killall darknet_py_gui
+
+The trained network weights appear in the "backup/" subdirectory.
+
+For a second training iteration with more images, create a new scaffold directory:
+
+    darknet_py_gui --create_dir=true --directory=$HOME/darkturk/train2
+
+And copy the desired weight file from *$HOME/darkturk/train1/backup/* into *$HOME/darkturk/train2/net.weights*
+
+Then start the trainer again, this time with 
+
+    darknet_py_gui --train=true --directory=$HOME/darkturk/train2
+
+Continue like this *ad nauseam*.
 
 ## Notes
 
-The "yolov3.cfg" that comes with this package, has been hacked as suggested [here](https://github.com/pjreddie/darknet/issues/1104)
+The "yolov3.cfg" that comes with this package, has been modified for detection as suggested [here](https://github.com/pjreddie/darknet/issues/1104)
 
 ## License
 
