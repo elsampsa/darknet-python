@@ -42,7 +42,7 @@ The debian package with
     
 ### 3. Download parameters
 
-With this command
+With this command (woops there was an error here in earlier versions.. try again!)
 
     darknet_py_download
     

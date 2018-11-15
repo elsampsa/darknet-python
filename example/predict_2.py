@@ -13,7 +13,7 @@ predictor = get_YOLOv3_Predictor()
 
 filenames=["dog.jpg", "eagle.jpg", "giraffe.jpg", "horses.jpg", "kite.jpg", "person.jpg"]
 
-for i in range(1,20):
+for i in range(1,2):
     for filename in filenames:
         image = Image.open(filename)
         img = numpy.array(image)

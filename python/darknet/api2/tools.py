@@ -38,7 +38,7 @@ def getUserFile(fname):
 
 def downloadYOLOv2():
     makeUserDir()
-    st="wget https://pjreddie.com/media/files/yolov2.weights -o " + getUserFile("yolov2.weights")
+    st="wget https://pjreddie.com/media/files/yolov2.weights -O " + getUserFile("yolov2.weights")
     print("running", st)
     print("this will take a while ..")
     os.system(st)
@@ -46,7 +46,7 @@ def downloadYOLOv2():
 
 def downloadYOLOv3():
     makeUserDir()
-    st="wget https://pjreddie.com/media/files/yolov3.weights -o " + getUserFile("yolov3.weights")
+    st="wget https://pjreddie.com/media/files/yolov3.weights -O " + getUserFile("yolov3.weights")
     print("running", st)
     print("this will take a while ..")
     os.system(st)
@@ -54,7 +54,7 @@ def downloadYOLOv3():
     
 def downloadYOLOv3Tiny():
     makeUserDir()
-    st="wget https://pjreddie.com/media/files/yolov3-tiny.weights -o " + getUserFile("yolov3-tiny.weights")
+    st="wget https://pjreddie.com/media/files/yolov3-tiny.weights -O " + getUserFile("yolov3-tiny.weights")
     print("running", st)
     print("this will take a while ..")
     os.system(st)
