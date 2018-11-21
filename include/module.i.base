@@ -18,13 +18,13 @@
 
 %init %{
 
-#ifndef GPU
-    gpu_index = -1;
-#else
-    if(gpu_index >= 0){
-        cuda_set_device(gpu_index);
-    }
-#endif
+//#ifndef GPU
+//    gpu_index = -1;
+//#else
+//    if(gpu_index >= 0){
+//        cuda_set_device(gpu_index);
+//    }
+//#endif
 
 import_array(); // numpy initialization that should be run only once
 
