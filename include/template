@@ -1,11 +1,11 @@
 /*
  * NAME.h :
  * 
- * Copyright 2018 Valkka Security Ltd. and Sampsa Riikonen.
+ * Copyright 2018 Sampsa Riikonen
  * 
  * Authors: Sampsa Riikonen <sampsa.riikonen@iki.fi>
  * 
- * This file is part of Valkka cpp examples
+ * This file is part of darknet_py Darknet Python bindings
  * 
  * Valkka cpp examples is free software: you can redistribute it and/or modify
  * it under the terms of the MIT License.

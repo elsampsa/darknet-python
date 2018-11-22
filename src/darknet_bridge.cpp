@@ -20,7 +20,7 @@
  *  @file    darknet_bridge.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.1
+ *  @version 0.2.0 
  *  
  *  @brief   Darket cpp and python interfaces
  */ 
@@ -29,6 +29,15 @@
 
 // #define SKIP_DARKNET 1
 // #define DEBUG 1
+
+
+bool darknet_with_cuda() {
+    #ifdef GPU
+    return true;
+    #else
+    return false;
+    #endif
+}
 
 image **load_alphabet_custom(const char* path)
 {

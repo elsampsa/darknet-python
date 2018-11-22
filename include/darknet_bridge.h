@@ -22,7 +22,7 @@
  *  @file    darknet_bridge.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.1
+ *  @version 0.2.0 
  *  
  *  @brief   Darket cpp and python interfaces to Valkka
  */ 
@@ -40,6 +40,8 @@ extern "C" { // https://stackoverflow.com/questions/15625468/libav-linking-error
 #include "option_list.h"
 #include "utils.h"
 }
+
+bool darknet_with_cuda(); // <pyapi>
 
 image **load_alphabet_custom(const char* path); ///< darknet fix : load alphabets from a custom location
 

@@ -1,5 +1,7 @@
+#ifndef constant_HEADER_GUARD
+#define constant_HEADER_GUARD
 /*
- * NAME.cpp :
+ * constant.h : Constant values
  * 
  * Copyright 2018 Sampsa Riikonen
  * 
@@ -17,12 +19,16 @@
  */
 
 /** 
- *  @file    NAME.cpp
+ *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.1
+ *  @version 0.2.0 
  *  
- *  @brief 
+ *  @brief
  */ 
 
-#include "NAME.h"
+static const int VERSION_MAJOR = 0; // <pyapi>
+static const int VERSION_MINOR = 2; // <pyapi>
+static const int VERSION_PATCH = 0; // <pyapi>
+
+#endif

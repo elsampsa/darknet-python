@@ -7,6 +7,7 @@
 %{ // this is prepended in the wapper-generated c(pp) file
 #define SWIG_FILE_WITH_INIT
 #include "darknet_bridge.h"
+#include "constant.h"
 #include <Python.h>
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION

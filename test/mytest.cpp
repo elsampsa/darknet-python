@@ -20,7 +20,7 @@
  *  @file    mytest.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.1
+ *  @version 0.2.0 
  *  
  *  @brief   test your valkka module code at the cpp level
  *

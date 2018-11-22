@@ -7,6 +7,7 @@
 %{ // this is prepended in the wapper-generated c(pp) file
 #define SWIG_FILE_WITH_INIT
 #include "darknet_bridge.h"
+#include "constant.h"
 #include <Python.h>
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
@@ -43,6 +44,10 @@ import_array(); // numpy initialization that should be run only once
 
 // next, expose what is necessary
 // autogenerate from this point on
+static const int VERSION_MAJOR = 0; // <pyapi>
+static const int VERSION_MINOR = 2; // <pyapi>
+static const int VERSION_PATCH = 0; // <pyapi>
+bool darknet_with_cuda(); // <pyapi>
  
 struct DarknetContext {                       // <pyapi>
     DarknetContext(std::string datacfg,       // <pyapi>  // file with one parameter per line.  Used for training and defining the labels
