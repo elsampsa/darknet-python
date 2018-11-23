@@ -84,6 +84,10 @@ Python examples can be found in the *example* folder.  It's as easy as this:
         print(l)
 
 
+## Video Surveillance with Yolo
+
+If you need something like this that works out-of-the-box, try [this](https://elsampsa.github.io/valkka-live/) program
+        
 ## Training
 
 This python binding comes with a homebrewn tagger program, written in Python3 and Qt, called "DarkTurk (tm)" (as in mechanical turk).  Install Python Qt with this command:
