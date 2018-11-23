@@ -9,7 +9,9 @@ Here we create a neat debian package for darknet with python3 bindings.
 
 ### 0. Install CUDA
 
-from [nvidia](https://developer.nvidia.com/cuda-downloads)
+This step is not obligatory.  Just do it if you want to use GPUs.
+
+Latest nvidia drivers and cuda can be found from [nvidia](https://developer.nvidia.com/cuda-downloads)
 
 if you have a GPU.  It's recommended to use a GPU with "compute capability" >= 5, see the scores [here](https://developer.nvidia.com/cuda-gpus).
 
