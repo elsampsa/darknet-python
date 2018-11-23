@@ -86,7 +86,7 @@ Python examples can be found in the *example* folder.  It's as easy as this:
 
 ## Video Surveillance with Yolo
 
-If you need something like this that works out-of-the-box, try [this](https://elsampsa.github.io/valkka-live/) program
+If you need video surveillance with object detection, that works out-of-the-box, try [this](https://elsampsa.github.io/valkka-live/) program
         
 ## Training
 
