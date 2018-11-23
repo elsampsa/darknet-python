@@ -38,7 +38,7 @@ It should detect the CUDA installation automagically if present
 
 The debian package with
 
-    sudo dpkg -i build_dir/python_darknet-0.1.0-Linux.deb
+    sudo dpkg -i build_dir/*.deb
     
 ### 3. Download parameters
 
