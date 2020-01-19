@@ -83,6 +83,13 @@ Python examples can be found in the *example* folder.  It's as easy as this:
     for l in lis:
         print(l)
 
+    # each element of the list is a tuple with:
+    # (class_name, probability_in_%, left, right, top, bottom)
+    # in another words:
+    # (x0, y0) = (left, bottom)
+    # (x1, y1) = (right, top)
+    # in y, smallest value corresponds to bottom left corner in the image, so if you use with cv2 / numpy, remember to invert the y axis
+
 
 ## Video Surveillance with Yolo
 
