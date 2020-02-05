@@ -4,3 +4,6 @@ build_dir/
 docs/html
 *.deb
 core/
+obj/
+*.a
+Makefile*
