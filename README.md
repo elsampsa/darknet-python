@@ -1,9 +1,9 @@
 
-# Python3 bindings for Darknet
+# Python3 API for Darknet
 
 Darknet is an OpenSource convoluted neural network library, see [here](https://pjreddie.com/darknet/)
 
-Here we create a neat debian package for darknet with python3 bindings.  
+This package features a neat Python3 API for darknet together with debian packaging
 
 ## Getting started
 
@@ -11,24 +11,30 @@ Here we create a neat debian package for darknet with python3 bindings.
 
 This step is not obligatory.  Just do it if you want to use GPUs.
 
+It's recommended to use a GPU with "compute capability" >= 5, see the scores [here](https://developer.nvidia.com/cuda-gpus).
+
 Latest nvidia drivers and cuda can be found from [nvidia](https://developer.nvidia.com/cuda-downloads)
 
-if you have a GPU.  It's recommended to use a GPU with "compute capability" >= 5, see the scores [here](https://developer.nvidia.com/cuda-gpus).
+The recommended method is the "debian (local)" one.  Before installing, you should remove an earlier installation of nvidia graphic drivers (say, use 'sudo apt-get remove --purge nvidia*')
 
-To see your GPU's specs, use the command 'nvidia-smi'.
+That package from nvidia will install you a recent graphics card driver and cuda that are compatible with each other.
+*This will overwrite the nvidia driver that comes with your standard package management and updates*
 
-The method that best worked for me, is the "debian (local)" one.  Before installing, you should remove an earlier installation of nvidia graphic drivers (say, use 'sudo apt-get remove --purge nvidia-*')
+It may happen that when you do an update in the future with apt, it will overwrite the package you have installed here.  In that case, just do 'sudo apt-get remove --purge nvidia*' and
+install drivers directly from nvidia again.
 
-For ubuntu 18, you may even want to try your luck with this automagic installation script
+After installing the package, log out & in and then see your GPU's specs using the command 'nvidia-smi'.
 
-    bootstrap/darknet_py_ubuntu18_cuda_install
+
+<!-- For ubuntu 18, you may even want to try your luck with this automagic installation script
+
+    bootstrap/darknet_py_ubuntu18_cuda_install -->
 
 ### 1. Compile
 
 You need at least:
 
-    sudo apt-get install build-essential libc6-dev cmake pkg-config swig libstdc++-5-dev python3 python3-dev python3-numpy python3-pil
-
+    sudo apt-get install build-essential cmake pkg-config swig python3 python3-dev python3-numpy python3-pil
 
 To compile darknet with python bindings and to create a debian package for installing, just run
 
@@ -89,6 +95,15 @@ Python examples can be found in the *example* folder.  It's as easy as this:
     # (x0, y0) = (left, bottom)
     # (x1, y1) = (right, top)
     # in y, smallest value corresponds to bottom left corner in the image, so if you use with cv2 / numpy, remember to invert the y axis
+
+## GPU memory requirements
+
+Approximately, as reported with nvidia-smi
+```
+Yolo v3          2400 MB
+Tiny Yolo v3     230 MB
+Yolo v2          1230 MB
+```
 
 
 ## Video Surveillance with Yolo

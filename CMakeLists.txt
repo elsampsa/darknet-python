@@ -12,6 +12,11 @@
 # - The python part is installed as a namespace package, under namespace "darknet.core"
 #
 
+# TODO: add link-time libraries:
+# pkg_search_module(CLBLAST REQUIRED clblast)
+# OpenCV ? (nopes..)
+# OpenCL stuff?
+
 cmake_minimum_required(VERSION 3.1)
 find_package(PkgConfig REQUIRED)
 
@@ -19,12 +24,21 @@ project(darknet)
 
 # **** INPUT VARIABLES ****
 
-## ** Where your custom-compiled library is located **
+## ** Necessary header files are under src/ and include/ of the main dir
 SET(DARKNET_ROOT "${CMAKE_SOURCE_DIR}/ext/darknet")
 option(darknet_root "darknet_root" OFF)
 if    (darknet_root)
   SET(DARKNET_ROOT ${darknet_root})
 endif (darknet_root)
+
+
+## ** The static library appears under main dir in the pjreddie darknet version
+SET(DARKNET_LIB "${DARKNET_ROOT}")
+option(darknet_lib "darknet_lib" OFF)
+if    (darknet_lib)
+  SET(DARKNET_LIB ${darknet_lib})
+endif (darknet_lib)
+
 
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
@@ -144,7 +158,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${DARKNET_ROOT}/include") # N
 target_include_directories(${PROJECT_NAME} PUBLIC "${DARKNET_ROOT}/src") # NOPE
 
 ## define where the .a files are to be found (you have compiled this by yourself)
-target_link_libraries(${PROJECT_NAME} "-L${DARKNET_ROOT}")
+target_link_libraries(${PROJECT_NAME} "-L${DARKNET_LIB}")
 ## link time dependencies
 target_link_libraries(${PROJECT_NAME} "rt")
 target_link_libraries(${PROJECT_NAME} "-Wl,--allow-multiple-definition" "-Wl,-Bsymbolic" "-Wl,--start-group" "-Wl,--whole-archive")

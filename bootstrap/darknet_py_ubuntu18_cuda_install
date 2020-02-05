@@ -6,6 +6,8 @@
 # chmod a+x darknet_py_ubuntu18_cuda_install
 # ./darknet_py_ubuntu18_cuda_install
 #
+echo NOT UP TO DATE!
+not-up-to-date
 echo 
 echo Downloading nvidia drivers and cuda.  This might take a while ..
 echo
