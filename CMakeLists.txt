@@ -201,13 +201,13 @@ target_include_directories(swig_module PUBLIC "${DARKNET_ROOT}/src") # NOPE
 #    target_link_libraries(swig_module "-L/usr/local/cuda/lib64")
 #    target_link_libraries(swig_module "cuda" "cudart" "cublas" "curand")
 #endif ()
-target_link_libraries(swig_module ${OPENCL_LIBRARIES})
-target_link_libraries(swig_module ${CLBLAST_LIBRARIES})
 
 # target_link_libraries(swig_module "-Wl,--no-as-needed")
 target_link_libraries(swig_module "darknet.so")
 target_link_libraries(swig_module "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
 
+target_link_libraries(swig_module ${CLBLAST_LIBRARIES})
+target_link_libraries(swig_module ${OPENCL_LIBRARIES})
 
 set_target_properties(swig_module PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${MAJOR_VERSION})
 set_target_properties(swig_module PROPERTIES PREFIX "")
@@ -230,16 +230,15 @@ foreach( testname ${TESTNAMES} )
   target_link_libraries(${testname} "${PROJECT_NAME}.so")
   target_link_libraries(${testname} "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
   target_link_libraries(${testname} ${PYTHON_LIBRARIES})
-  target_link_libraries(${testname} ${OPENCL_LIBRARIES})
+  
   target_link_libraries(${testname} ${CLBLAST_LIBRARIES})
+  target_link_libraries(${testname} ${OPENCL_LIBRARIES})
 
   #if (NOT CUDAERROR)
   #  target_include_directories(${testname} PUBLIC "/usr/local/cuda/include/")
   #  target_link_libraries(${testname} "-L/usr/local/cuda/lib64")
   #  target_link_libraries(${testname} "cuda" "cudart" "cublas" "curand")
   #endif ()
-
-  
 
   add_dependencies(tests ${testname}) # tests depends on the executable
   add_dependencies(${testname} ${PROJECT_NAME})
