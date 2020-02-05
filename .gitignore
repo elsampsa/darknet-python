@@ -3,3 +3,4 @@ core/
 __pycache__/
 /docs/html/
 *.deb
+ext/darknet
