@@ -63,6 +63,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # exec_program(pkg-config ARGS --libs x11 glew OUTPUT_VARIABLE GL_LIBS)
 pkg_search_module(PYTHON REQUIRED python3)
 # populates *_INCLUDE_DIRS and *_LIBRARIES variables
+pkg_search_module(OPENCL REQUIRED OpenCL)
+pkg_search_module(CLBLAST REQUIRED clblast)
+
 
 message("*** PYTHON INTERFACE ***")
 # execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
@@ -74,23 +77,23 @@ message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
 
 
 # check if cuda installed
-SET(CUDAERROR 100)
-
-execute_process(
-  COMMAND nvidia-smi
-  # COMMAND ls
-  RESULT_VARIABLE CUDAERROR
-  OUTPUT_QUIET
-  ERROR_QUIET
-)
-
+#SET(CUDAERROR 100)
+#
+#execute_process(
+#  COMMAND nvidia-smi
+#  # COMMAND ls
+#  RESULT_VARIABLE CUDAERROR
+#  OUTPUT_QUIET
+#  ERROR_QUIET
+#)
+#
 # SET(CUDAERROR 0) # debugging: force cuda
-
-if (NOT CUDAERROR) # eh.. this means its 0
-    message("")
-    message("*** WILL COMPILE WITH CUDA ***")
-    add_definitions("-DGPU")
-endif ()
+#
+#if (NOT CUDAERROR) # eh.. this means its 0
+#    message("")
+#    message("*** WILL COMPILE WITH CUDA ***")
+#    add_definitions("-DGPU")
+#endif ()
 
 execute_process(
   COMMAND ./makeswig.bash
@@ -178,11 +181,13 @@ target_link_libraries(${PROJECT_NAME} "-Wl,--no-whole-archive" "-Wl,--end-group"
 ## link time dependencies
 #target_link_libraries(${PROJECT_NAME} ${SQLITE_LIBRARIES})
 
-if (NOT CUDAERROR)
-    target_include_directories(${PROJECT_NAME} PUBLIC "/usr/local/cuda/include/")
-    target_link_libraries(${PROJECT_NAME} "-L/usr/local/cuda/lib64")
-    target_link_libraries(${PROJECT_NAME} "cuda" "cudart" "cublas" "curand")
-endif ()
+#if (NOT CUDAERROR)
+#    target_include_directories(${PROJECT_NAME} PUBLIC "/usr/local/cuda/include/")
+#    target_link_libraries(${PROJECT_NAME} "-L/usr/local/cuda/lib64")
+#    target_link_libraries(${PROJECT_NAME} "cuda" "cudart" "cublas" "curand")
+#endif ()
+target_link_libraries(${PROJECT_NAME} ${OPENCL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${CLBLAST_LIBRARIES})
 # **************************************************************************************************
 
 # *** (SWIG, 3) Compile the cpp-wrapped python code ***
@@ -191,15 +196,18 @@ target_include_directories(swig_module PUBLIC include)
 target_include_directories(swig_module PUBLIC $${NUMPY_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 target_include_directories(swig_module PUBLIC "${DARKNET_ROOT}/include") # NOPE
 target_include_directories(swig_module PUBLIC "${DARKNET_ROOT}/src") # NOPE
-if (NOT CUDAERROR)
-    target_include_directories(swig_module PUBLIC "/usr/local/cuda/include/")
-    target_link_libraries(swig_module "-L/usr/local/cuda/lib64")
-    target_link_libraries(swig_module "cuda" "cudart" "cublas" "curand")
-endif ()
+#if (NOT CUDAERROR)
+#    target_include_directories(swig_module PUBLIC "/usr/local/cuda/include/")
+#    target_link_libraries(swig_module "-L/usr/local/cuda/lib64")
+#    target_link_libraries(swig_module "cuda" "cudart" "cublas" "curand")
+#endif ()
+target_link_libraries(swig_module ${OPENCL_LIBRARIES})
+target_link_libraries(swig_module ${CLBLAST_LIBRARIES})
 
 # target_link_libraries(swig_module "-Wl,--no-as-needed")
 target_link_libraries(swig_module "darknet.so")
 target_link_libraries(swig_module "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
+
 
 set_target_properties(swig_module PROPERTIES VERSION ${VERSION_STRING} SOVERSION ${MAJOR_VERSION})
 set_target_properties(swig_module PROPERTIES PREFIX "")
@@ -222,12 +230,14 @@ foreach( testname ${TESTNAMES} )
   target_link_libraries(${testname} "${PROJECT_NAME}.so")
   target_link_libraries(${testname} "-L${CMAKE_CURRENT_BINARY_DIR}/lib")
   target_link_libraries(${testname} ${PYTHON_LIBRARIES})
-  
-  if (NOT CUDAERROR)
-    target_include_directories(${testname} PUBLIC "/usr/local/cuda/include/")
-    target_link_libraries(${testname} "-L/usr/local/cuda/lib64")
-    target_link_libraries(${testname} "cuda" "cudart" "cublas" "curand")
-  endif ()
+  target_link_libraries(${testname} ${OPENCL_LIBRARIES})
+  target_link_libraries(${testname} ${CLBLAST_LIBRARIES})
+
+  #if (NOT CUDAERROR)
+  #  target_include_directories(${testname} PUBLIC "/usr/local/cuda/include/")
+  #  target_link_libraries(${testname} "-L/usr/local/cuda/lib64")
+  #  target_link_libraries(${testname} "cuda" "cudart" "cublas" "curand")
+  #endif ()
 
   
 
