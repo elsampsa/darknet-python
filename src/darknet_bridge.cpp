@@ -452,8 +452,8 @@ PyObject* DarknetPredictor::predict(PyObject* pyarr, bool draw) {
     if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
     
     if (draw) {
-        draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes);
-        // draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes, 0); // sowson_darknet
+        // draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes);
+        draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes, 0); // sowson_darknet
     }
 
     // std::cout << "DarknetPredictor: predict: " << std::endl;

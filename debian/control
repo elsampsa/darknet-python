@@ -1,4 +1,4 @@
-Source: darknet_python
+Source: darknet_opencl_python
 Section: libs
 Priority: optional
 Maintainer: Sampsa Riikonen <sampsa.riikonen@iki.fi>
@@ -6,8 +6,7 @@ Build-Depends: build-essential, libc6-dev, cmake, pkg-config, swig, libstdc++-5-
 Standards-Version: 3.9.7
 Homepage: http://www.iki.fi/sampsa.riikonen
 
-Package: valkka_example_module
+Package: darknet_opencl
 Architecture: any
 Depends: python3, python3-numpy, python3-pil
-Description: An extension module for Valkka
- OpenSource Video Management for Linux
+Description: OpenCL darknet with python bindings

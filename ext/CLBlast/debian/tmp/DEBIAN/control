@@ -1,0 +1,9 @@
+Package: clblast
+Version: 0.16.0-0ubuntu1-xenialppa1
+Architecture: amd64
+Maintainer: Sampsa Riikonen <sampsa.riikonen@iki.fi>
+Installed-Size: 13593
+Section: libs
+Priority: optional
+Homepage: https://github.com/CNugteren/CLBlast
+Description: CLBlast

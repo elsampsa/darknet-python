@@ -1,25 +1,30 @@
 #!/usr/bin/make -f
 
 # we need absolute paths because of CMake ..
-MAINDIR   = $(CURDIR)
-EXTDIR    = $(MAINDIR)/ext
-BUILDDIR  = $(MAINDIR)/build_dir
+MAINDIR      = $(CURDIR)
+BUILDDIR     = $(MAINDIR)/build_dir
 # a demo static library.  Comment this if not needed
-DARKDIR   = $(MAINDIR)/ext/darknet
+DARKDIR      = $(MAINDIR)/ext/sowson_darknet
+DARKBUILDDIR = $(DARKDIR)/build_dir
+# location of CMakeLists.txt:
+DARKCMAKEDIR = $(DARKDIR)
 
-# secondly called by launchpad
-# this called from the main dir, i.e. by "debuild" => make -f debian/rules clean;build;etc
-# that -DCMAKE_INSTALL_PREFIX creates an install script for CMake itself
-# TODO: find live, ffmpeg and valkka from consolidated locations
 build:
-	cd $(EXTDIR); ./configure_darknet.bash
-	cd $(DARKDIR); make -f Makefile2
+	## build darknet
+	# cd $(EXTDIR); ./configure_darknet.bash
+	# cd $(DARKDIR); make -f Makefile2
+	mkdir -p $(DARKBUILDDIR);
+	cd $(DARKBUILDDIR); cmake -DCMAKE_BUILD_TYPE="Release" $(DARKCMAKEDIR)
+	make -C $(DARKBUILDDIR)
+
+	## build darknet_py
+	## needs header & static library dirs from the darknet build
 	mkdir -p $(BUILDDIR);
-	cd $(BUILDDIR); cmake -Ddarknet_root=$(DARKDIR) -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(MAINDIR)
+	cd $(BUILDDIR); cmake -Ddarknet_root=$(DARKDIR) -Ddarknet_lib=$(DARKBUILDDIR) -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(MAINDIR)
 	make -C $(BUILDDIR)
 
-cmake:
-	cd $(BUILDDIR); cmake -Ddarknet_root=$(DARKDIR) -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(MAINDIR)
+#cmake:
+#	cd $(BUILDDIR); cmake -Ddarknet_root=$(DARKDIR) -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(MAINDIR)
 	
 # thirdly called by launchpad
 binary: binary-indep binary-arch
@@ -31,17 +36,15 @@ binary-indep:
 binary-arch:
 	cd $(BUILDDIR); cmake -P cmake_install.cmake
 	mkdir debian/tmp/DEBIAN
-	dpkg-gencontrol -pvalkka
+	dpkg-gencontrol -pdarknet_opencl
 	dpkg --build debian/tmp ..
 
 # firstly called by launchpad
 clean:
-	rm -f build
-	rm -rf $(BUILDDIR)
-	cd $(DARKDIR); make clean
+	rm -rf $(BUILDDIR) $(DARKBUILDDIR)
+	# cd $(DARKBUILDDIR); make clean
 	
-# this is for people building valkka from scratch
-package:
-	make -C $(BUILDDIR) package
+#package:
+#	make -C $(BUILDDIR) package
 
-.PHONY: binary binary-arch binary-indep clean
+.PHONY: binary binary-arch binary-indep clean build

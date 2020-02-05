@@ -1,0 +1,45 @@
+#!/usr/bin/make -f
+
+# we need absolute paths because of CMake ..
+MAINDIR   = $(CURDIR)
+EXTDIR    = $(MAINDIR)/ext
+BUILDDIR  = $(MAINDIR)/build_dir
+# a demo static library.  Comment this if not needed
+SOURCEDIR = $(MAINDIR)/src
+# where the CMakeLists.txt is located:
+CMAKEDIR  = $(MAINDIR)
+
+build:
+	# cd $(EXTDIR); ./configure_darknet.bash
+	# cd $(SOURCEDIR); make -f Makefile
+	mkdir -p $(BUILDDIR);
+	cd $(BUILDDIR); cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(CMAKEDIR)
+	make -C $(BUILDDIR)
+
+cmake:
+	cd $(BUILDDIR); cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX=$(MAINDIR)/debian/tmp/usr $(CMAKEDIR)
+	
+# thirdly called by launchpad
+binary: binary-indep binary-arch
+
+binary-indep:
+	# nothing to be done
+
+# cmake runs the install script it generated at build stage
+binary-arch:
+	cd $(BUILDDIR); cmake -P cmake_install.cmake
+	mkdir -p debian/tmp/DEBIAN
+	dpkg-gencontrol -pclblast
+	dpkg --build debian/tmp ..
+
+# firstly called by launchpad
+clean:
+	# rm -f build
+	rm -rf $(BUILDDIR)
+	# cd $(SOURCEDIR); make clean
+	
+# this is for people building valkka from scratch
+package:
+	make -C $(BUILDDIR) package
+
+.PHONY: binary binary-arch binary-indep clean build

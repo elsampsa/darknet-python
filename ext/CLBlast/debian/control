@@ -1,0 +1,12 @@
+Source: clblast
+Section: libs
+Priority: optional
+Maintainer: Sampsa Riikonen <sampsa.riikonen@iki.fi>
+Build-Depends: build-essential, libc6-dev, cmake, pkg-config
+Standards-Version: 3.9.7
+Homepage: https://github.com/CNugteren/CLBlast
+
+Package: clblast
+Architecture: any
+Depends:
+Description: CLBlast

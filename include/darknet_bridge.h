@@ -35,11 +35,13 @@
 #include "numpy/arrayobject.h"
 
 #include "darknet.h" // this header file has extern C blocks inside
-
-extern "C" { // https://stackoverflow.com/questions/15625468/libav-linking-error-undefined-references
+#include "list.h"
 #include "option_list.h"
-#include "utils.h"
-}
+
+//extern "C" { // https://stackoverflow.com/questions/15625468/libav-linking-error-undefined-references
+//#include "option_list.h"
+//#include "utils.h"
+//}
 
 bool darknet_with_cuda(); // <pyapi>
 

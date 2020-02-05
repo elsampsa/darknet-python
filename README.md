@@ -1,5 +1,9 @@
 
-# Python3 API for Darknet
+# Python3 API for OpenCL Darknet 
+
+**WARNING** This branch features the OpenCL version and is **UNDER CONSTRUCTION**
+
+**If you want NVidia Cuda or just reguslar CPU, check out the main branch of this repository**
 
 Darknet is an OpenSource convoluted neural network library, see [here](https://pjreddie.com/darknet/)
 
@@ -7,28 +11,25 @@ This package features a neat Python3 API for darknet together with debian packag
 
 ## Getting started
 
-### 0. Install CUDA
+### 0. Install OpenCL
 
-This step is not obligatory.  Just do it if you want to use GPUs.
+https://github.com/intel/compute-runtime
 
-It's recommended to use a GPU with "compute capability" >= 5, see the scores [here](https://developer.nvidia.com/cuda-gpus).
+https://github.com/intel/compute-runtime/blob/master/documentation/Neo_in_distributions.md#ubuntu-ppa-for-1604-1804-1904-1910-2004
 
-Latest nvidia drivers and cuda can be found from [nvidia](https://developer.nvidia.com/cuda-downloads)
+sudo apt install ocl-icd-* opencl-headers
 
-The recommended method is the "debian (local)" one.  Before installing, you should remove an earlier installation of nvidia graphic drivers (say, use 'sudo apt-get remove --purge nvidia*')
+clinfo
 
-That package from nvidia will install you a recent graphics card driver and cuda that are compatible with each other.
-*This will overwrite the nvidia driver that comes with your standard package management and updates*
+TODO
 
-It may happen that when you do an update in the future with apt, it will overwrite the package you have installed here.  In that case, just do 'sudo apt-get remove --purge nvidia*' and
-install drivers directly from nvidia again.
+### 1. Compile & Install CLBlast
 
-After installing the package, log out & in and then see your GPU's specs using the command 'nvidia-smi'.
+Give alternative installation methods
 
+    ./easy_build_clblast.bash
 
-<!-- For ubuntu 18, you may even want to try your luck with this automagic installation script
-
-    bootstrap/darknet_py_ubuntu18_cuda_install -->
+TODO
 
 ### 1. Compile
 
