@@ -3,7 +3,9 @@
 
 Darknet is an OpenSource convoluted neural network library, see [here](https://pjreddie.com/darknet/)
 
-This package features a neat Python3 API for darknet together with debian packaging
+This package features a Python3 API for darknet together with debian packaging for easy distribution.
+
+*No config files, image label jpg directories (!) etc.  Just a clean & simple Python3 API that works out of the box*
 
 ## Getting started
 
