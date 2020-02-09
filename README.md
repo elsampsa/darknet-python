@@ -25,6 +25,8 @@ That package from nvidia will install you a recent graphics card driver and cuda
 It may happen that when you do an update in the future with apt, it will overwrite the package you have installed here.  In that case, just do 'sudo apt-get remove --purge nvidia*' and
 install drivers directly from nvidia again.
 
+(to disable ubuntu auto updates, search at launch "software & updates" => go to "updates" tab and disable updates to "never")
+
 After installing the package, log out & in and then see your GPU's specs using the command 'nvidia-smi'.
 
 
