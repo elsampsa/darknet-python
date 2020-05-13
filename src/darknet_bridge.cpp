@@ -333,7 +333,11 @@ DarknetPredictor::~DarknetPredictor() {
     
 #ifdef SKIP_DARKNET
 #else
-    free_network(net);
+    std::cout << "DarknetPredictor: releasing network" << std::endl;
+    free_network(net); 
+    // that doesn't free all gpu memory
+    // pjreddie's darknet is a memory-leaking piece of shit
+    // should never try to adapt code made by academics to production use
 #endif
     // TODO:
     //free(alphabet); // or should run through the alphabets ..?

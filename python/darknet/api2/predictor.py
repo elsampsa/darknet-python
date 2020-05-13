@@ -96,7 +96,7 @@ class Predictor:
             
 
 
-def get_YOLOv2_Predictor():
+def get_YOLOv2_Predictor(thresh = 0.6):
     # has been trained with coco
     file_yolov2_cfg = getDataFile("yolov2/yolov2.cfg")
     
@@ -109,10 +109,10 @@ def get_YOLOv2_Predictor():
         setname = "coco"
     )
 
-    return Predictor(training_ctx = yolov2_training_ctx, weight_file = get_yolov2_weights_file(), config_file = file_yolov2_cfg, thresh = 0.6)
+    return Predictor(training_ctx = yolov2_training_ctx, weight_file = get_yolov2_weights_file(), config_file = file_yolov2_cfg, thresh = thresh)
 
             
-def get_YOLOv3_Predictor():
+def get_YOLOv3_Predictor(thresh = 0.9):
     # has been trained with coco
     file_yolov3_cfg = getDataFile("yolov3/yolov3.cfg")
     
@@ -125,10 +125,10 @@ def get_YOLOv3_Predictor():
         setname = "coco"
     )
 
-    return Predictor(training_ctx = yolov3_training_ctx, weight_file = get_yolov3_weights_file(), config_file = file_yolov3_cfg)
+    return Predictor(training_ctx = yolov3_training_ctx, weight_file = get_yolov3_weights_file(), config_file = file_yolov3_cfg, thresh = thresh)
     
 
-def get_YOLOv3_Tiny_Predictor():
+def get_YOLOv3_Tiny_Predictor(thresh = 0.5):
     # has been trained with coco
     file_yolov3_tiny_cfg = getDataFile("yolov3-tiny/yolov3-tiny.cfg")
     
@@ -141,7 +141,7 @@ def get_YOLOv3_Tiny_Predictor():
         setname = "coco"
     )
     
-    return Predictor(training_ctx = yolov3_tiny_training_ctx, weight_file = get_yolov3_tiny_weights_file(), config_file = file_yolov3_tiny_cfg, thresh = 0.5)
+    return Predictor(training_ctx = yolov3_tiny_training_ctx, weight_file = get_yolov3_tiny_weights_file(), config_file = file_yolov3_tiny_cfg, thresh = thresh)
         
 
 
