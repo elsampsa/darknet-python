@@ -7,6 +7,18 @@ This package features a Python3 API for darknet together with debian packaging f
 
 *No config files, image label jpg directories (!) etc.  Just a clean & simple Python3 API that works out of the box*
 
+
+## Changelog
+
+- version 0.2.1
+
+    Fixed a memleak
+
+    - The Predictor dtor was unable to free the cuda memory with ```free_network```.
+    - ..so added a call to ```cudaDeviceReset```.  Now there's no stray memory left on the GPU.
+
+- version 0.2.0
+
 ## Getting started
 
 ### 0. Install CUDA
@@ -54,7 +66,7 @@ The debian package with
     
 ### 3. Download parameters
 
-With this command (woops there was an error here in earlier versions.. try again!)
+With this command:
 
     darknet_py_download
     
@@ -170,6 +182,10 @@ Continue like this *ad nauseam*.
 ## Notes
 
 The "yolov3.cfg" that comes with this package, has been modified for detection as suggested [here](https://github.com/pjreddie/darknet/issues/1104)
+
+## TODO
+
+Need to migrate this to alexbe darknet asap.  Any volunteers?
 
 ## License
 

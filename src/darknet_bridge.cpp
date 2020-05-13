@@ -20,12 +20,13 @@
  *  @file    darknet_bridge.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.2.0 
+ *  @version 0.2.1 
  *  
  *  @brief   Darket cpp and python interfaces
  */ 
 
 #include "darknet_bridge.h"
+#include "cuda.h"
 
 // #define SKIP_DARKNET 1
 // #define DEBUG 1
@@ -333,11 +334,14 @@ DarknetPredictor::~DarknetPredictor() {
     
 #ifdef SKIP_DARKNET
 #else
-    std::cout << "DarknetPredictor: releasing network" << std::endl;
+    // std::cout << "DarknetPredictor: releasing network" << std::endl;
     free_network(net); 
     // that doesn't free all gpu memory
-    // pjreddie's darknet is a memory-leaking piece of shit
-    // should never try to adapt code made by academics to production use
+    // Darknet is a memory-leaking piece of .... (sorry pjreddie)
+    // should never try to adapt code made by academics to production use?
+    // cudaFree(0); // nopes
+    cudaDeviceReset(); // phew.. this solves the issue
+    // ..not that angry with pjreddie anymore.  Thanks for the great code.  :)
 #endif
     // TODO:
     //free(alphabet); // or should run through the alphabets ..?

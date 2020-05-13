@@ -22,7 +22,7 @@
  *  @file    darknet_bridge.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.2.0 
+ *  @version 0.2.1 
  *  
  *  @brief   Darket cpp and python interfaces to Valkka
  */ 
