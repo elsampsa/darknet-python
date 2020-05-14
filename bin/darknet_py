@@ -3,21 +3,34 @@ import os
 import sys
 import numpy
 from PIL import Image
-from darknet.api2 import predictor, get_YOLOv3_Predictor, get_YOLOv3_Tiny_Predictor
+from darknet.api2 import predictor, get_YOLOv3_Predictor, get_YOLOv3_Tiny_Predictor, get_YOLOv2_Predictor
 from darknet.api2 import WeightMissingError
 
-filename = sys.argv[1]
+try:
+    yolo_flavor = sys.argv[1]
+    filename = sys.argv[2]
+except IndexError:
+    print("\nUsage: darknet_py yolo_flavor image\nFor example: darknet_py v3 image.jpg\nFlavors: v3, v2, v3tiny\n")
+    raise
+    
+assert(yolo_flavor in ["v3", "v2", "v3tiny"])
 assert(os.path.exists(filename))
+
 image = Image.open(filename)
 img = numpy.array(image)
 
+print("\nUsing TinyYolo V3\n")
+
 try:
-    predictor = get_YOLOv3_Predictor()
+    if yolo_flavor == "v3":
+        predictor = get_YOLOv3_Predictor()
+    elif yolo_flavor == "v2":
+        predictor = get_YOLOv2_Predictor()
+    else:
+        predictor = get_YOLOv3_Tiny_Predictor()
 except WeightMissingError:
     print("No weight files downloaded.  Use 'darknet_py_download' first")
     raise(SystemExit())
-    
-# predictor = get_YOLOv3_Tiny_Predictor()
 
 lis = predictor(img)
 print("\n(object, probability [%], left, right, top, bottom)")

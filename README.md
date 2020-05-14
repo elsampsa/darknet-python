@@ -10,6 +10,10 @@ This package features a Python3 API for darknet together with debian packaging f
 
 ## Changelog
 
+- version 0.2.2
+
+    - Added some options to the ```darknet_py``` test command
+
 - version 0.2.1
 
     Fixed a memleak
@@ -85,7 +89,9 @@ If everything is OK, the program should report something like this:
     
 Test with any image using the script "darknet_py" like this:
 
-    darknet_py somefile.jpg
+    darknet_py <yolo_flavor> somefile.jpg
+    
+where ```<yolo_flavor>``` can be v3, v2 or v3tiny
     
 ## Python API
 

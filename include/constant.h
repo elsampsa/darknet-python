@@ -22,13 +22,13 @@
  *  @file    constant.h
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.2.1 
+ *  @version 0.2.2 
  *  
  *  @brief
  */ 
 
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 2; // <pyapi>
-static const int VERSION_PATCH = 1; // <pyapi>
+static const int VERSION_PATCH = 2; // <pyapi>
 
 #endif
