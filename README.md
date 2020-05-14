@@ -74,7 +74,16 @@ Or copy the directory *~/.darknet* from another installation
     
 ### 4. Test
 
-With the test script "darknet_py" like this:
+A quicktest:
+
+    cd example
+    python3 predict_2.py
+    
+If everything is OK, the program should report something like this:
+
+    Predicting took 0.03300929069519043 seconds
+    
+Test with any image using the script "darknet_py" like this:
 
     darknet_py somefile.jpg
     
@@ -120,6 +129,7 @@ Yolo v3          2400 MB
 Tiny Yolo v3     230 MB
 Yolo v2          1230 MB
 ```
+A tip: if you want to save GPU memory, disable your desktop compositor.
 
 
 ## Video Surveillance with Yolo
