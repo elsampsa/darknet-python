@@ -46,7 +46,7 @@ import_array(); // numpy initialization that should be run only once
 // autogenerate from this point on
 static const int VERSION_MAJOR = 0; // <pyapi>
 static const int VERSION_MINOR = 2; // <pyapi>
-static const int VERSION_PATCH = 1; // <pyapi>
+static const int VERSION_PATCH = 2; // <pyapi>
 bool darknet_with_cuda(); // <pyapi>
  
 struct DarknetContext {                       // <pyapi>

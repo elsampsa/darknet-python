@@ -62,6 +62,16 @@ To compile darknet with python bindings and to create a debian package for insta
     
 It should detect the CUDA installation automagically if present
     
+If you get this error:
+```
+cuda_runtime.h: No such file or directory
+```
+
+You must manually create a link to the correct cuda version, i.e.
+```
+sudo ln -s /usr/local/cuda-10.2 /usr/local/cuda
+```
+
 ### 2. Install
 
 The debian package with
