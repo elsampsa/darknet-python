@@ -10,6 +10,10 @@ This package features a Python3 API for darknet together with debian packaging f
 
 ## Changelog
 
+- version 0.2.3
+
+    - Nasty memleak fixed, related to [this](https://stackoverflow.com/questions/3512414/does-this-pylist-appendlist-py-buildvalue-leak) : should use PyList/PyTuple_SetItem to steal the references.
+
 - version 0.2.2
 
     - Added some options to the ```darknet_py``` test command

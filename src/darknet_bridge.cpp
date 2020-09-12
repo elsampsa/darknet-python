@@ -20,7 +20,7 @@
  *  @file    darknet_bridge.cpp
  *  @author  Sampsa Riikonen
  *  @date    2018
- *  @version 0.2.2 
+ *  @version 0.2.3 
  *  
  *  @brief   Darket cpp and python interfaces
  */ 
@@ -93,11 +93,23 @@ list *read_data_cfg_custom(std::string datacfg) { // let's read the config file 
 PyObject *get_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
 // draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes);
 {
-    PyObject *pylist = PyList_New(0);
-    int i, j;
+    // PyObject *pylist = PyList_New(0);
+    int i, j, cc;
 
     // std::cout << "get_detections: num, classes : " << num << " " << classes << std::endl;
-    
+
+    cc = 0;
+    for(i = 0; i < num; ++i){ // loop over boxes (i.e. detections)
+        for(j = 0; j < classes; ++j){
+            if (dets[i].prob[j] > thresh) {
+                cc++;
+            }
+        }
+    }
+
+    PyObject *pylist = PyList_New(cc);
+
+    cc = 0;
     for(i = 0; i < num; ++i){ // loop over boxes (i.e. detections)
         // char labelstr[4096] = {0};
         // int class = -1;
@@ -131,7 +143,15 @@ PyObject *get_detections(image im, detection *dets, int num, float thresh, char 
                 if(bot > im.h-1) bot = im.h-1;
                 
                 // printf("%s: (%i, %i, %i, %i) %.0f%%\n", names[j], left, right, top, bot, dets[i].prob[j]*100);
-                
+
+                PyObject *pytuple = PyTuple_New(6);
+                PyTuple_SetItem(pytuple, 0, PyUnicode_FromString(names[j]) );
+                PyTuple_SetItem(pytuple, 1, PyLong_FromLong((long)(dets[i].prob[j]*100)) );
+                PyTuple_SetItem(pytuple, 2, PyLong_FromLong((long)left) );
+                PyTuple_SetItem(pytuple, 3, PyLong_FromLong((long)right) );
+                PyTuple_SetItem(pytuple, 4, PyLong_FromLong((long)top) );
+                PyTuple_SetItem(pytuple, 5, PyLong_FromLong((long)bot) );
+                /*
                 PyObject *pytuple = PyTuple_Pack(6, // class name, probability in %, left, right, top, bottom
                     PyUnicode_FromString(names[j]),
                     PyLong_FromLong((long)(dets[i].prob[j]*100)),
@@ -140,7 +160,10 @@ PyObject *get_detections(image im, detection *dets, int num, float thresh, char 
                     PyLong_FromLong((long)top),
                     PyLong_FromLong((long)bot)
                 );
-                int success = PyList_Append(pylist, pytuple);
+                */
+                // int success = PyList_Append(pylist, pytuple);
+                int success = PyList_SetItem(pylist, cc, pytuple);
+                cc++;
             }
         }
     }
