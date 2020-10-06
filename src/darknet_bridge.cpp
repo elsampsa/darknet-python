@@ -26,7 +26,9 @@
  */ 
 
 #include "darknet_bridge.h"
+#ifdef GPU
 #include "cuda.h"
+#endif
 
 // #define SKIP_DARKNET 1
 // #define DEBUG 1
@@ -363,7 +365,9 @@ DarknetPredictor::~DarknetPredictor() {
     // Darknet is a memory-leaking piece of .... (sorry pjreddie)
     // should never try to adapt code made by academics to production use?
     // cudaFree(0); // nopes
+    #ifdef GPU
     cudaDeviceReset(); // phew.. this solves the issue
+    #endif
     // ..not that angry with pjreddie anymore.  Thanks for the great code.  :)
 #endif
     // TODO:
