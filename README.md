@@ -1,6 +1,10 @@
 
 # Python3 API for Darknet
 
+*This is a Python3 API for pjreddie's original darknet/yolo cpp code.  For running neural-net based
+object detection in python, nowadays you might prefer pytorch or tensorflow-based approached instead.
+A nice alternative is, for example, the* [Detectron framework](https://github.com/facebookresearch/detectron2).
+
 Darknet is an OpenSource convoluted neural network library, see [here](https://pjreddie.com/darknet/)
 
 This package features a Python3 API for darknet together with debian packaging for easy distribution.
