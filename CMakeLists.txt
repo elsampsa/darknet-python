@@ -39,6 +39,14 @@ if    (darknet_lib)
   SET(DARKNET_LIB ${darknet_lib})
 endif (darknet_lib)
 
+option(python_command "python_command" OFF)
+IF(python_command)
+    message("custom python3 command defined")
+ELSE()
+    message("using default python3 command")
+    SET(python_command "python3")
+ENDIF(python_command)
+
 
 # ****************************************************************
 # WARNING: the following three lines are modified by the "setver.bash" script
@@ -65,11 +73,30 @@ pkg_search_module(PYTHON REQUIRED python3)
 # populates *_INCLUDE_DIRS and *_LIBRARIES variables
 
 message("*** PYTHON INTERFACE ***")
+# pkg_search_module(PYTHON REQUIRED python3) # don't use! https://bugs.python.org/issue36721
+exec_program("${python_command}-config" ARGS --includes OUTPUT_VARIABLE PYTHON_INCLUDE_DIRS_TMP)
+# exec_program(python3-config ARGS --libs --embed OUTPUT_VARIABLE PYTHON_LIBRARIES_TMP RETURN_VALUE RETVAL)
+exec_program("${python_command}-config" ARGS --ldflags --embed OUTPUT_VARIABLE PYTHON_LIBRARIES RETURN_VALUE RETVAL)
+#message("RETVAL: ${RETVAL}")
+if(RETVAL)
+    message("${python_command}-config failed with --embed, so will re-run without it")
+    # exec_program(python3-config ARGS --libs OUTPUT_VARIABLE PYTHON_LIBRARIES_TMP RETURN_VALUE RETVAL)
+    exec_program("${python_command}-config" ARGS --ldflags OUTPUT_VARIABLE PYTHON_LIBRARIES RETURN_VALUE RETVAL)
+else(RETVAL)
+    # nada
+endif(RETVAL)
+#string(REPLACE " -l" " " PYTHON_LIBRARIES_TMP ${PYTHON_LIBRARIES_TMP})
+#string(REPLACE " " ";" PYTHON_LIBRARIES ${PYTHON_LIBRARIES_TMP})
+string(REPLACE "-I" " " PYTHON_INCLUDE_DIRS_TMP ${PYTHON_INCLUDE_DIRS_TMP})
+string(REPLACE " " ";" PYTHON_INCLUDE_DIRS ${PYTHON_INCLUDE_DIRS_TMP})
+message("PYTHON_LIBRARIES: ${PYTHON_LIBRARIES}")
+message("PYTHON_INCLUDE_DIRS: ${PYTHON_INCLUDE_DIRS}")
+
 # execute_process(COMMAND python3 -c "from distutils import sysconfig; print(sysconfig.get_python_lib(),end='')" OUTPUT_VARIABLE PYTHON_DIR)
 set(PYTHON_DIR "lib/python3/dist-packages") # just hard-code it
 message("PYTHON INSTALL DIR           : " ${PYTHON_DIR})
 
-execute_process(COMMAND python3 -c "import numpy; print(numpy.get_include(),end='')" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
+execute_process(COMMAND "${python_command} -c import numpy; print(numpy.get_include(),end='')" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
 message("PYTHON NUMPY HEADER FILES IN : " ${NUMPY_INCLUDE_DIR})
 
 

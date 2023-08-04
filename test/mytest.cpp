@@ -26,6 +26,7 @@
  *
  */ 
 
+#include "Python.h"
 #include "darknet_bridge.h"
 
 using namespace std::chrono_literals;
